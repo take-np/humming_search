@@ -1,0 +1,10 @@
+<titile>投稿の說明を入力</titile>
+
+<!--
+ここには audioタグを入れて、前のページで入れた音声を再生する
+-->
+<%= form_tag("/posts/create", ) do %>
+<input type="text" name="details" value="說明を入力してください">
+<input type="submit" value="詳細を登録">
+
+<% end %>
