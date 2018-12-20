@@ -1,11 +1,25 @@
 // set up basic variables for app
 //mozilaのgitよりサンプルコードを取得
 
+var blobToBase64 = function(blob, cb) {
+    var reader = new FileReader();
+    reader.onload = function() {
+    var dataUrl = reader.result;
+    var base64 = dataUrl.split(',')[1];
+    cb(base64);
+    };
+    reader.readAsDataURL(blob);
+};
+
 var record = document.querySelector('.record');
 var stop = document.querySelector('.stop');
 var soundClips = document.querySelector('.sound-clips');
 var canvas = document.querySelector('.visualizer');
 var mainSection = document.querySelector('.main-controls');
+// ajaxでurlを指定する際にidの部分にログインしているユーザーの値が入るようにする。。
+var userId = document.getElementById("user_id").value;
+var userId_num = Number(userId);
+// var userId = userId.textContent;
 // htmlのクラスで指定する場合には、s上記のquerySelectorを指定する
 
 // disable stop button while not recording
@@ -18,7 +32,6 @@ var audioCtx = new (window.AudioContext || webkitAudioContext)();
 var canvasCtx = canvas.getContext("2d");
 
 //main block for doing the audio recording
-
 if (navigator.mediaDevices.getUserMedia) {
   console.log('getUserMedia supported.');
 
@@ -34,7 +47,7 @@ if (navigator.mediaDevices.getUserMedia) {
       mediaRecorder.start();
       console.log(mediaRecorder.state);
       console.log("recorder started");
-      record.style.background = "red";
+      record.style.background = "#d85b45";
 
       stop.disabled = false;
       record.disabled = true;
@@ -113,12 +126,30 @@ if (navigator.mediaDevices.getUserMedia) {
 
         // サーバーに保存するための動作
       saveButton.onclick = function(){
-          /*https://developer.mozilla.org/ja/docs/Web/Guide/Using_FormData_Objects*/
+       //  blobToBase64(blob, onConvBase64)
+       // }
+       // function onConvBase64(base64data){
+       /*https://developer.mozilla.org/ja/docs/Web/Guide/Using_FormData_Objects*/
+
+      // フォームの内容を受け取るために参考にしたURL
+      // https://qiita.com/yui540/items/394450dcb0da8d3847b6
+      // https://qiita.com/yuzoiwasaki/items/f14ce25e3341a377c920
+      // https://qiita.com/yuki-n/items/885f6f059167a7b5aedc
+       var details = document.getElementById("details").value;
+       console.log(details);
+
         var fd = new FormData();
-        // fd.append('name', "test");
-        fd.append("test.ogg", blob);
+        fd.append('name', "test");
+        fd.append("audio", blob);
+        fd.append("details", details);
         console.log(fd);
-          /*          https://qiita.com/EastResident/items/639e886531d9687d70b1
+        /*
+          FormDataにデータを渡すさいに参考にしたURL
+          http://www.koikikukan.com/archives/2014/10/07-005555.php
+        */
+
+        /*          https://qiita.com/EastResident/items/639e886531d9687d70b1
+          https://qiita.com/EastResident/items/639e886531d9687d70b1
           http://tech.at-iroha.jp/?p=663
           参考URL https://www.sejuku.net/blog/30245
           https://blog.codecamp.jp/jquery_basic/
@@ -127,9 +158,13 @@ if (navigator.mediaDevices.getUserMedia) {
           http://www.koikikukan.com/archives/2014/09/30-013333.php  */
           for (item of fd);
             console.log(item);
+          var url_t = 'http://localhost:3000/posts/' +
+          userId_num + '/create';
+          console.log(url_t);
 
           // CSRFを突破するための、記述。下記サイトよりコピーしてきた
           // https://qiita.com/a_ishidaaa/items/7c3fa339d3bea25a9ba8
+          // 下をコメントアウトしても、音声の録音と保存は可能になっている
           $.ajaxPrefilter(function(options, originalOptions, jqXHR) {
                   var token;
                   if (!options.crossDomain) {
@@ -140,14 +175,15 @@ if (navigator.mediaDevices.getUserMedia) {
                   }
             });
           $.ajax({
-            url: 'http://localhost:3000/posts/create',
+            url: url_t,
             type: "POST",
-            // dataType: 'blob',
-            data: {audio: fd},
+            data: fd,
             processData: false, //JQuery がデータを処理しないように指定
-            contentType: false  //JQuery が contentTypeを設定しないように指定 （cf. mdn FormData）
+            contentType: false,  //JQuery が contentTypeを設定しないように指定 （cf. mdn FormData）
+//            headers: {'Content-Type': 'multipart/form-data'}
           })
           .done(function(data){
+            console.log("xxxxx--");
             console.log(data);
           })
           .fail(function(data){

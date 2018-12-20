@@ -17,8 +17,12 @@
 <!-- CSRFトークンの対策として、描きを記述する模様。ただ、下記の方法のいずれを用いればよいのかわからないので、下記もコメントアウトしている
 1. application_controller のprotect from forgeryを :null_sessionに変更するのか
 2. new_recoredにajaxの突破するための記述を行うのか。その場合、合わせて下記の <meta ... >の記述を追加するのか
+
+2018/10/18追記
+下記をコメントアウトしないと、ログアウトができない。以下のエラーメッセージが表示される
+" ActionController::InvalidAuthenticityToken in UsersController#logout "
  -->
-<meta name="csrf-token" content="{{ csrf_token() }}">
+<!-- <meta name="csrf-token" content="{{ csrf_token() }}"> -->
 <html>
   <head>
     <title>Humming Search</title>
@@ -29,23 +33,28 @@
 
   <body>
     <header>
-      <!-- <div class="header-logo">
-        <%= link_to("Humming Search", "/") %>
+      <!-- <div class="header-log">
+        <% if@current_user%>
+          <%= link_to("Humming Search", "/posts/index")%>
+        <% else %>
+        <%= link_to("Humming Search", "/")%>
+        <% end %>
       </div> -->
-
 
       <ul class ="header-menus">
         <% if @current_user %>
+          <li><%= link_to("Humming Search", "/")%></li>
           <li><%= link_to(@current_user.name, "/users/#{@current_user.id}")%></li>
           <li><%= link_to("質問一覧", "/posts/index")%></li>
-          <li><%= link_to("質問をする", "/posts/new_record")%></li>
+          <li><%= link_to("質問をする", "/posts/#{@current_user.id}/new_record")%></li>
           <li><%= link_to("ログアウト", "/logout", {method: :post})%></li>
         <% else %>
         <!--ログインしていない状態  -->
+          <li><%= link_to("Humming Search", "/")%></li>
           <li><%=link_to("新規登録", "/users/new") %></li>
           <li><%=link_to("ログイン", "/login") %></li>
           <li><%=link_to("質問を見る", "/posts/index") %></li>
-          <li><%=link_to("質問をする", "/posts/new_record") %></li>
+          <li><%=link_to("質問をする", "posts/:id/new_record") %></li>
         <% end %>
       </ul>
 

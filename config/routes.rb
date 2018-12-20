@@ -19,12 +19,10 @@ Rails.application.routes.draw do
 
   get 'posts/index' => "posts#index"
   get "posts/sapmle" => "posts#sample"
-
-
-
-  get 'posts/new_record' => "posts#new_record"
   get "posts/new_details" => "posts#new_details"
-  post "posts/create" => "posts#create"
+
+  get 'posts/:id/new_record' => "posts#new_record"
+  post "posts/:id/create" => "posts#create"
 
 
   get "posts/:id" => "posts#show"
@@ -34,7 +32,15 @@ Rails.application.routes.draw do
 
   get '/' => "home#top"
   post 'posts/update' => "posts#update"
-
+  #
+  # # 以下はコメント追加ように設定。コメントを設定しない場合には削除
+  # resources :posts, param: :slug do
+  #   resources :comments,except: [:index,:show] do
+  #     member do
+  #       get :reply
+  #     end
+  #   end
+  # end
 
 
   # The priority is based upon order of creation: first created -> highest priority.

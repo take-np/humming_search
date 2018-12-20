@@ -2,7 +2,7 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 // 以下Progateよりそのまま貼り付け
-// 文字カラーをwhite から #2b2b2bに変更
+// 文字カラーをwhite から #303030に変更
 
 
 .posts-index-item {
@@ -47,7 +47,7 @@
 
 .posts-show-item {
   padding: 30px;
-  background-color: #2b2b2b;
+  background-color: #fff;
   box-shadow: 0 2px 6px #c1ced7;
   overflow: hidden;
 }
@@ -102,7 +102,13 @@
 }
 
 /* posts/new_record ================================ */
-/*
+// newrecored用のcssだが、他のページに影響してデザイン崩れる可能性ある。
+// 崩れた場合には、ここを参照すること
+#details{
+  margin: 0.5rem 0;
+  color: #b2b2b2;
+}
+
 .main-controls {
   padding: 0.5rem 0;
 }
@@ -128,9 +134,9 @@ canvas {
 
 button {
   font-size: 1rem;
-  background: #0088cc;
+  background: #E8F3EC;
   text-align: center;
-  color: #2b2b2b;
+  color: #303030;
   border: none;
   transition: all 0.2s;
   padding: 0.5rem;
@@ -138,7 +144,7 @@ button {
 
 button:hover, button:focus {
   box-shadow: inset 0px 0px 10px rgba(255, 255, 255, 1);
-  background: #0ae;
+  background: #b5e5c6;
 }
 
 button:active {
@@ -176,8 +182,7 @@ audio {
 }
 
 button.delete {
-  background: #f00;
-  padding: 0.5rem 0.75rem;
+  background: #d85b45;
+  padding: 0.5rem 0.5rem;
   font-size: 0.8rem;
 }
-*/

@@ -1,3 +1,25 @@
-# <%=  @post.content %>
-#
-# <%= @post.created_at %>
+<div class="main posts-show">
+  <div class="container">
+    <div class="posts-show-item">
+      <div class="post-user-name">
+        <img src="<%= "/user_images/#{@user.image_name}" %>">
+        <%= link_to(@user.name, "/users/#{@user.id}") %>
+      </div>
+      <p>
+        <audio controls src=" <%= "/user_audio/#{@post.audio_name}" %>"></audio>    
+      </p>
+      <p>
+        <%= @post.details %>
+      </p>
+      <div class="post-time">
+        <%= @post.created_at %>
+      </div>
+      <!-- <% if @post.user_id == @current_user.id %>
+        <div class="post-menus">
+          <%= link_to("編集", "/posts/#{@post.id}/edit") %>
+          <%= link_to("削除", "/posts/#{@post.id}/destroy", {method: "post"}) %>
+        </div>
+      <% end %> -->
+    </div>
+  </div>
+</div>

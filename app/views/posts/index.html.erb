@@ -2,9 +2,10 @@
 
 <div class="main posts-index">
   <div class="container">
+    <div class="posts-index-item">
     <% @posts.each do |post| %>
-      <div class="posts-index-item">
-        <%= link_to(post.content, "posts/#{post.id}")%>
+        <%= link_to(post.details, "/posts/#{post.id}")%>
+        <audio controls src=" <%= "/user_audio/#{post.audio_name}" %>"></audio>
       </div>
     <% end %>
   </div>
